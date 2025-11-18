@@ -1,0 +1,1764 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ADHD 筛查 (成人与儿童)</title>
+        <!-- 确保响应式布局和字体加载 -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            /* 使用 Tailwind 'font-sans'，并提供中文回退 */
+            body {
+                font-family:
+                    "Inter",
+                    "Noto Sans SC",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    "Helvetica Neue",
+                    Arial,
+                    sans-serif;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            .hidden {
+                display: none;
+            }
+        </style>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ["Inter", "Noto Sans SC", "sans-serif"],
+                        },
+                        colors: {
+                            primary: {
+                                DEFAULT: "#007bff",
+                                hover: "#0069d9",
+                            },
+                            secondary: {
+                                DEFAULT: "#6c757d",
+                            },
+                            success: {
+                                DEFAULT: "#28a745",
+                                hover: "#218838",
+                            },
+                            danger: {
+                                light: "#fff3f3",
+                                border: "#fdb8b8",
+                                text: "#dc3545",
+                            },
+                            warning: {
+                                light: "#fffbeb",
+                                border: "#fde68a",
+                                "border-dark": "#facc15",
+                                text: "#b45309",
+                            },
+                            info: {
+                                light: "#f3f9ff",
+                                border: "#b8d4fb",
+                                text: "#007bff",
+                            },
+                        },
+                    },
+                },
+            };
+        </script>
+    </head>
+    <body class="bg-gray-100 text-gray-800 font-sans">
+        <!-- 1. 选择页面 (新) -->
+        <div id="selection-screen" class="max-w-3xl mx-auto my-8 p-6">
+            <h1 class="text-3xl font-bold text-center text-gray-900 mb-6">
+                ADHD 自测问卷
+            </h1>
+            <p class="text-center text-lg text-gray-600 mb-8">
+                请选择您要进行的自测类型：
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- 成人选项 -->
+                <div
+                    class="bg-white p-8 rounded-lg shadow-lg border border-gray-200 flex flex-col items-center text-center"
+                >
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">
+                        成人自测 (ASRS)
+                    </h2>
+                    <p class="text-gray-600 mb-6 flex-grow">
+                        基于“成人ADHD自我报告量表”(ASRS-v1.1)，适用于
+                        <strong>18岁及以上</strong> 成人评估
+                        <strong>自己</strong> 最近6个月的状况。
+                    </p>
+                    <button
+                        id="select-adult"
+                        class="w-full bg-primary hover:bg-primary-hover text-white text-lg font-bold py-3 px-6 rounded-lg shadow-md transition duration-300"
+                    >
+                        开始成人自测
+                    </button>
+                </div>
+
+                <!-- 儿童选项 -->
+                <div
+                    class="bg-white p-8 rounded-lg shadow-lg border border-gray-200 flex flex-col items-center text-center"
+                >
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">
+                        儿童自测 (Vanderbilt)
+                    </h2>
+                    <p class="text-gray-600 mb-6 flex-grow">
+                        基于“范德比尔特评估量表”(NICHQ)，由
+                        <strong>家长或监护人</strong> 填写，评估
+                        <strong>6-12岁儿童</strong> 最近6个月的状况。
+                    </p>
+                    <button
+                        id="select-child"
+                        class="w-full bg-success hover:bg-success-hover text-white text-lg font-bold py-3 px-6 rounded-lg shadow-md transition duration-300"
+                    >
+                        开始儿童自测
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="bg-warning-light border-l-4 border-warning-border-dark text-warning-text p-6 mt-10 rounded-md shadow-sm"
+            >
+                <h3 class="text-xl font-bold mb-3">【重要声明】</h3>
+                <p class="mb-2">
+                    本网站提供的所有自测工具 <strong>均不是诊断工具</strong>。
+                </p>
+                <p class="mb-2">
+                    它们仅用于帮助识别可能与 ADHD
+                    一致的症状，不能单独用于确诊或排除任何疾病。
+                </p>
+                <p>
+                    问卷内容改编自在国际研究和临床实践中广泛使用的标准化工具（如
+                    ASRS、Vanderbilt
+                    等），以尽量提高筛查结果的科学性和可行性。无论结果如何，如果您对自己或孩子的行为、注意力或心理健康感到担忧，请务必咨询合格的医疗保健专业人员（如精神科医生、临床心理学家或儿科医生）以进行全面评估。
+                </p>
+            </div>
+        </div>
+
+        <!-- 2. 成人筛查页面 (原内容, 稍作修改) -->
+        <div
+            id="adult-screener"
+            class="max-w-3xl mx-auto my-8 p-6 bg-white rounded-lg shadow-lg hidden"
+        >
+            <button
+                id="back-to-selection-adult"
+                class="mb-4 text-primary hover:text-primary-hover font-semibold"
+            >
+                &larr; 返回选择页面
+            </button>
+
+            <h1
+                class="text-3xl font-bold text-center text-gray-900 mb-4 pb-4 border-b-2 border-gray-200"
+            >
+                成人ADHD自评量表 (ASRS-v1.1) 筛查
+            </h1>
+
+            <div
+                id="disclaimer"
+                class="bg-warning-light border-l-4 border-warning-border-dark text-warning-text p-4 my-6 rounded-md shadow-sm"
+            >
+                <h3 class="text-lg font-bold mb-2">【重要】请在开始前阅读</h3>
+                <p class="mb-2">
+                    本测试是基于世界卫生组织 (WHO) 开发的“成人ADHD自我报告量表
+                    (ASRS-v1.1)”的6题筛查版 [1]。
+                </p>
+                <p class="mb-2">
+                    本量表主要用于初步筛查，完成时间约为 2–3
+                    分钟。请在相对安静、不被打扰的环境中作答，并尽量回想您在工作、学习和家庭等不同情境中的典型表现。
+                </p>
+                <p class="mb-2">
+                    <strong>这不是一个诊断工具。</strong
+                    >本筛查量表的目的是帮助您识别可能与成人ADHD一致的症状 [3,
+                    5]。它<strong>绝不能替代</strong>由合格的医疗保健专业人员（如精神科医生、临床心理学家）进行的全面评估
+                    [6, 7]。
+                </p>
+                <p>
+                    无论结果如何，如果您对自己的心理健康、注意力或冲动性感到担忧，请务必咨询专业人士。
+                </p>
+            </div>
+
+            <form id="adult-form">
+                <p class="text-center text-gray-600 italic mb-2">
+                    请根据您在
+                    <strong>过去 6 个月</strong>
+                    的经历，选择最能描述您情况的选项 [8]。
+                </p>
+                <p class="text-center text-gray-500 text-sm mb-6">
+                    如果您目前正在接受 ADHD
+                    或其他精神科治疗，请按“治疗期间的典型状态”作答，并在就诊时将本量表结果提供给专业人员参考。
+                </p>
+
+                <!-- 问题 1 -->
+                <div
+                    class="question bg-white p-6 rounded-lg border border-gray-200 mb-6 shadow-sm"
+                >
+                    <p class="text-lg font-semibold text-gray-900 mb-4">
+                        1.
+                        一旦完成了一个项目中最具挑战的部分，您有多少次会在<strong>完成项目的最后细节时遇到困难</strong>？
+                    </p>
+                    <div class="options flex flex-wrap gap-3">
+                        <input
+                            type="radio"
+                            id="q1_0"
+                            name="q1"
+                            value="0"
+                            class="hidden peer"
+                        /><label for="q1_0" class="radio-label">从不</label>
+                        <input
+                            type="radio"
+                            id="q1_1"
+                            name="q1"
+                            value="1"
+                            class="hidden peer"
+                        /><label for="q1_1" class="radio-label">很少</label>
+                        <input
+                            type="radio"
+                            id="q1_2"
+                            name="q1"
+                            value="2"
+                            class="hidden peer"
+                        /><label for="q1_2" class="radio-label">有时</label>
+                        <input
+                            type="radio"
+                            id="q1_3"
+                            name="q1"
+                            value="3"
+                            class="hidden peer"
+                        /><label for="q1_3" class="radio-label">经常</label>
+                        <input
+                            type="radio"
+                            id="q1_4"
+                            name="q1"
+                            value="4"
+                            class="hidden peer"
+                        /><label for="q1_4" class="radio-label">非常经常</label>
+                    </div>
+                </div>
+
+                <!-- 问题 2 -->
+                <div
+                    class="question bg-white p-6 rounded-lg border border-gray-200 mb-6 shadow-sm"
+                >
+                    <p class="text-lg font-semibold text-gray-900 mb-4">
+                        2.
+                        当您必须完成一项需要有条不紊的任务时，您有多少次会<strong>在按顺序组织事情时遇到困难</strong>？
+                    </p>
+                    <div class="options flex flex-wrap gap-3">
+                        <input
+                            type="radio"
+                            id="q2_0"
+                            name="q2"
+                            value="0"
+                            class="hidden peer"
+                        /><label for="q2_0" class="radio-label">从不</label>
+                        <input
+                            type="radio"
+                            id="q2_1"
+                            name="q2"
+                            value="1"
+                            class="hidden peer"
+                        /><label for="q2_1" class="radio-label">很少</label>
+                        <input
+                            type="radio"
+                            id="q2_2"
+                            name="q2"
+                            value="2"
+                            class="hidden peer"
+                        /><label for="q2_2" class="radio-label">有时</label>
+                        <input
+                            type="radio"
+                            id="q2_3"
+                            name="q2"
+                            value="3"
+                            class="hidden peer"
+                        /><label for="q2_3" class="radio-label">经常</label>
+                        <input
+                            type="radio"
+                            id="q2_4"
+                            name="q2"
+                            value="4"
+                            class="hidden peer"
+                        /><label for="q2_4" class="radio-label">非常经常</label>
+                    </div>
+                </div>
+
+                <!-- 问题 3 -->
+                <div
+                    class="question bg-white p-6 rounded-lg border border-gray-200 mb-6 shadow-sm"
+                >
+                    <p class="text-lg font-semibold text-gray-900 mb-4">
+                        3.
+                        您有多少次会<strong>在记住约会或义务时遇到问题</strong>？
+                    </p>
+                    <div class="options flex flex-wrap gap-3">
+                        <input
+                            type="radio"
+                            id="q3_0"
+                            name="q3"
+                            value="0"
+                            class="hidden peer"
+                        /><label for="q3_0" class="radio-label">从不</label>
+                        <input
+                            type="radio"
+                            id="q3_1"
+                            name="q3"
+                            value="1"
+                            class="hidden peer"
+                        /><label for="q3_1" class="radio-label">很少</label>
+                        <input
+                            type="radio"
+                            id="q3_2"
+                            name="q3"
+                            value="2"
+                            class="hidden peer"
+                        /><label for="q3_2" class="radio-label">有时</label>
+                        <input
+                            type="radio"
+                            id="q3_3"
+                            name="q3"
+                            value="3"
+                            class="hidden peer"
+                        /><label for="q3_3" class="radio-label">经常</label>
+                        <input
+                            type="radio"
+                            id="q3_4"
+                            name="q3"
+                            value="4"
+                            class="hidden peer"
+                        /><label for="q3_4" class="radio-label">非常经常</label>
+                    </div>
+                </div>
+
+                <!-- 问题 4 -->
+                <div
+                    class="question bg-white p-6 rounded-lg border border-gray-200 mb-6 shadow-sm"
+                >
+                    <p class="text-lg font-semibold text-gray-900 mb-4">
+                        4.
+                        当您有一项需要大量思考的任务时，您有多少次会<strong>拖延或逃避开始</strong>？
+                    </p>
+                    <div class="options flex flex-wrap gap-3">
+                        <input
+                            type="radio"
+                            id="q4_0"
+                            name="q4"
+                            value="0"
+                            class="hidden peer"
+                        /><label for="q4_0" class="radio-label">从不</label>
+                        <input
+                            type="radio"
+                            id="q4_1"
+                            name="q4"
+                            value="1"
+                            class="hidden peer"
+                        /><label for="q4_1" class="radio-label">很少</label>
+                        <input
+                            type="radio"
+                            id="q4_2"
+                            name="q4"
+                            value="2"
+                            class="hidden peer"
+                        /><label for="q4_2" class="radio-label">有时</label>
+                        <input
+                            type="radio"
+                            id="q4_3"
+                            name="q4"
+                            value="3"
+                            class="hidden peer"
+                        /><label for="q4_3" class="radio-label">经常</label>
+                        <input
+                            type="radio"
+                            id="q4_4"
+                            name="q4"
+                            value="4"
+                            class="hidden peer"
+                        /><label for="q4_4" class="radio-label">非常经常</label>
+                    </div>
+                </div>
+
+                <!-- 问题 5 -->
+                <div
+                    class="question bg-white p-6 rounded-lg border border-gray-200 mb-6 shadow-sm"
+                >
+                    <p class="text-lg font-semibold text-gray-900 mb-4">
+                        5.
+                        当您必须长时间坐着时（例如在会议中），您有多少次会<strong>坐立不安，玩弄手脚</strong>？
+                    </p>
+                    <div class="options flex flex-wrap gap-3">
+                        <input
+                            type="radio"
+                            id="q5_0"
+                            name="q5"
+                            value="0"
+                            class="hidden peer"
+                        /><label for="q5_0" class="radio-label">从不</label>
+                        <input
+                            type="radio"
+                            id="q5_1"
+                            name="q5"
+                            value="1"
+                            class="hidden peer"
+                        /><label for="q5_1" class="radio-label">很少</label>
+                        <input
+                            type="radio"
+                            id="q5_2"
+                            name="q5"
+                            value="2"
+                            class="hidden peer"
+                        /><label for="q5_2" class="radio-label">有时</label>
+                        <input
+                            type="radio"
+                            id="q5_3"
+                            name="q5"
+                            value="3"
+                            class="hidden peer"
+                        /><label for="q5_3" class="radio-label">经常</label>
+                        <input
+                            type="radio"
+                            id="q5_4"
+                            name="q5"
+                            value="4"
+                            class="hidden peer"
+                        /><label for="q5_4" class="radio-label">非常经常</label>
+                    </div>
+                </div>
+
+                <!-- 问题 6 -->
+                <div
+                    class="question bg-white p-6 rounded-lg border border-gray-200 mb-6 shadow-sm"
+                >
+                    <p class="text-lg font-semibold text-gray-900 mb-4">
+                        6.
+                        您有多少次会<strong>感觉自己过度活跃，好像被马达驱动一样</strong>，不得不做事情？
+                    </p>
+                    <div class="options flex flex-wrap gap-3">
+                        <input
+                            type="radio"
+                            id="q6_0"
+                            name="q6"
+                            value="0"
+                            class="hidden peer"
+                        /><label for="q6_0" class="radio-label">从不</label>
+                        <input
+                            type="radio"
+                            id="q6_1"
+                            name="q6"
+                            value="1"
+                            class="hidden peer"
+                        /><label for="q6_1" class="radio-label">很少</label>
+                        <input
+                            type="radio"
+                            id="q6_2"
+                            name="q6"
+                            value="2"
+                            class="hidden peer"
+                        /><label for="q6_2" class="radio-label">有时</label>
+                        <input
+                            type="radio"
+                            id="q6_3"
+                            name="q6"
+                            value="3"
+                            class="hidden peer"
+                        /><label for="q6_3" class="radio-label">经常</label>
+                        <input
+                            type="radio"
+                            id="q6_4"
+                            name="q6"
+                            value="4"
+                            class="hidden peer"
+                        /><label for="q6_4" class="radio-label">非常经常</label>
+                    </div>
+                </div>
+
+                <!-- 错误消息区 -->
+                <div
+                    id="adult-error-message"
+                    class="bg-danger-light border border-danger-border text-danger-text p-4 rounded-md mb-6 shadow-sm"
+                    style="display: none"
+                    role="alert"
+                    aria-live="assertive"
+                ></div>
+
+                <button
+                    type="button"
+                    id="adult-submit-button"
+                    class="w-full bg-success hover:bg-success-hover text-white text-lg font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-0.5"
+                >
+                    查看筛查结果
+                </button>
+            </form>
+
+            <!-- 结果区域 -->
+            <div
+                id="adult-result"
+                class="mt-8 p-6 rounded-lg shadow-md"
+                style="display: none"
+                role="status"
+                aria-live="polite"
+            >
+                <!-- 结果将通过 JS 动态插入 -->
+            </div>
+        </div>
+
+        <!-- 3. 儿童筛查页面 (新) -->
+        <div
+            id="child-screener"
+            class="max-w-3xl mx-auto my-8 p-6 bg-white rounded-lg shadow-lg hidden"
+        >
+            <button
+                id="back-to-selection-child"
+                class="mb-4 text-primary hover:text-primary-hover font-semibold"
+            >
+                &larr; 返回选择页面
+            </button>
+
+            <h1
+                class="text-3xl font-bold text-center text-gray-900 mb-4 pb-4 border-b-2 border-gray-200"
+            >
+                儿童ADHD家长评定量表 (Vanderbilt 筛查版)
+            </h1>
+
+            <div
+                class="bg-warning-light border-l-4 border-warning-border-dark text-warning-text p-4 my-6 rounded-md shadow-sm"
+            >
+                <h3 class="text-lg font-bold mb-2">
+                    【重要】请家长/监护人填写
+                </h3>
+                <p class="mb-2">
+                    本测试基于 NICHQ 范德比尔特评估量表 (Vanderbilt Assessment
+                    Scale) 的 <strong>ADHD 核心症状部分</strong>，适用于
+                    <strong>6至12岁</strong> 的儿童。
+                </p>
+                <p class="mb-2">
+                    本在线版本未包含原量表中的学习/行为功能、对立违抗、品行问题以及焦虑/抑郁等项目，因此<strong
+                        >只能反映 ADHD 核心症状的频率</strong
+                    >，不能单独用于诊断或排除其他问题。
+                </p>
+                <p class="mb-2">
+                    请您根据孩子在
+                    <strong>过去 6 个月</strong> 的整体表现来回答以下问题。
+                </p>
+                <p>
+                    <strong>这不是一个诊断工具。</strong
+                    >它旨在帮助识别需要专业评估的症状。请务必与儿科医生或儿童精神科医生讨论您的担忧。
+                </p>
+            </div>
+
+            <form id="child-form">
+                <!-- 第一部分：注意力不集中 (Inattention) -->
+                <h2
+                    class="text-xl font-bold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-300"
+                >
+                    第一部分：注意力不集中
+                </h2>
+                <div class="space-y-6">
+                    <!-- cq1 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            1.
+                            您的孩子在做功课或任务时，是否经常不注意细节，或犯粗心的错误？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq1_0"
+                                name="cq1"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq1_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq1_1"
+                                name="cq1"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq1_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq1_2"
+                                name="cq1"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq1_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq1_3"
+                                name="cq1"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq1_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq2 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            2.
+                            您的孩子在做功课或玩耍时，是否经常难以保持注意力？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq2_0"
+                                name="cq2"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq2_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq2_1"
+                                name="cq2"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq2_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq2_2"
+                                name="cq2"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq2_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq2_3"
+                                name="cq2"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq2_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq3 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            3.
+                            当别人对他/她说话时，您的孩子是否经常看起来没有在听？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq3_0"
+                                name="cq3"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq3_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq3_1"
+                                name="cq3"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq3_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq3_2"
+                                name="cq3"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq3_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq3_3"
+                                name="cq3"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq3_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq4 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            4.
+                            您的孩子是否经常不按指示完成任务，并且无法完成功课或家务（不是因为对抗行为或不理解）？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq4_0"
+                                name="cq4"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq4_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq4_1"
+                                name="cq4"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq4_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq4_2"
+                                name="cq4"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq4_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq4_3"
+                                name="cq4"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq4_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq5 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            5. 您的孩子是否经常在组织任务和活动方面有困难？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq5_0"
+                                name="cq5"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq5_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq5_1"
+                                name="cq5"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq5_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq5_2"
+                                name="cq5"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq5_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq5_3"
+                                name="cq5"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq5_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq6 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            6.
+                            您的孩子是否经常逃避、不喜欢或不愿做需要持续用脑的任务（如功课）？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq6_0"
+                                name="cq6"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq6_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq6_1"
+                                name="cq6"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq6_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq6_2"
+                                name="cq6"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq6_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq6_3"
+                                name="cq6"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq6_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq7 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            7.
+                            您的孩子是否经常丢失任务或活动所需的东西（如玩具、作业、铅笔）？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq7_0"
+                                name="cq7"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq7_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq7_1"
+                                name="cq7"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq7_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq7_2"
+                                name="cq7"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq7_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq7_3"
+                                name="cq7"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq7_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq8 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            8. 您的孩子是否经常容易被外界刺激分散注意力？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq8_0"
+                                name="cq8"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq8_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq8_1"
+                                name="cq8"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq8_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq8_2"
+                                name="cq8"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq8_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq8_3"
+                                name="cq8"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq8_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq9 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            9. 您的孩子在日常活动中是否经常健忘？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq9_0"
+                                name="cq9"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq9_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq9_1"
+                                name="cq9"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq9_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq9_2"
+                                name="cq9"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq9_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq9_3"
+                                name="cq9"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq9_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第二部分：多动/冲动 (Hyperactivity/Impulsivity) -->
+                <h2
+                    class="text-xl font-bold text-gray-800 mt-10 mb-4 pb-2 border-b border-gray-300"
+                >
+                    第二部分：多动与冲动
+                </h2>
+                <div class="space-y-6">
+                    <!-- cq10 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            10.
+                            您的孩子是否经常坐立不安，玩弄手脚或在座位上扭动？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq10_0"
+                                name="cq10"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq10_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq10_1"
+                                name="cq10"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq10_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq10_2"
+                                name="cq10"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq10_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq10_3"
+                                name="cq10"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq10_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq11 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            11.
+                            您的孩子是否经常在课堂上或在其他需要坐着的情况下离开座位？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq11_0"
+                                name="cq11"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq11_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq11_1"
+                                name="cq11"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq11_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq11_2"
+                                name="cq11"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq11_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq11_3"
+                                name="cq11"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq11_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq12 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            12.
+                            您的孩子是否经常在不适当的场合跑来跑去或爬高（青少年可能只是感到躁动不安）？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq12_0"
+                                name="cq12"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq12_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq12_1"
+                                name="cq12"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq12_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq12_2"
+                                name="cq12"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq12_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq12_3"
+                                name="cq12"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq12_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq13 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            13. 您的孩子是否经常无法安静地玩耍或参与休闲活动？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq13_0"
+                                name="cq13"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq13_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq13_1"
+                                name="cq13"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq13_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq13_2"
+                                name="cq13"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq13_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq13_3"
+                                name="cq13"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq13_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq14 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            14. 您的孩子是否经常“忙个不停”，好像被马达驱动一样？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq14_0"
+                                name="cq14"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq14_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq14_1"
+                                name="cq14"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq14_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq14_2"
+                                name="cq14"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq14_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq14_3"
+                                name="cq14"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq14_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq15 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            15. 您的孩子是否经常话多（过度交谈）？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq15_0"
+                                name="cq15"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq15_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq15_1"
+                                name="cq15"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq15_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq15_2"
+                                name="cq15"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq15_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq15_3"
+                                name="cq15"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq15_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq16 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            16. 您的孩子是否经常在问题还没问完时就抢着回答？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq16_0"
+                                name="cq16"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq16_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq16_1"
+                                name="cq16"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq16_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq16_2"
+                                name="cq16"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq16_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq16_3"
+                                name="cq16"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq16_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq17 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            17. 您的孩子是否经常难以等待轮到自己？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq17_0"
+                                name="cq17"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq17_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq17_1"
+                                name="cq17"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq17_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq17_2"
+                                name="cq17"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq17_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq17_3"
+                                name="cq17"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq17_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                    <!-- cq18 -->
+                    <div
+                        class="question bg-white p-5 rounded-lg border border-gray-200 shadow-sm"
+                    >
+                        <p class="text-lg font-semibold text-gray-900 mb-4">
+                            18.
+                            您的孩子是否经常打断或侵扰他人（例如，闯入对话或游戏）？
+                        </p>
+                        <div class="options flex flex-wrap gap-3">
+                            <input
+                                type="radio"
+                                id="cq18_0"
+                                name="cq18"
+                                value="0"
+                                class="hidden peer"
+                            /><label for="cq18_0" class="radio-label"
+                                >从不</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq18_1"
+                                name="cq18"
+                                value="1"
+                                class="hidden peer"
+                            /><label for="cq18_1" class="radio-label"
+                                >偶尔</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq18_2"
+                                name="cq18"
+                                value="2"
+                                class="hidden peer"
+                            /><label for="cq18_2" class="radio-label"
+                                >经常</label
+                            >
+                            <input
+                                type="radio"
+                                id="cq18_3"
+                                name="cq18"
+                                value="3"
+                                class="hidden peer"
+                            /><label for="cq18_3" class="radio-label"
+                                >非常经常</label
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 错误消息区 -->
+                <div
+                    id="child-error-message"
+                    class="bg-danger-light border border-danger-border text-danger-text p-4 rounded-md my-6 shadow-sm"
+                    style="display: none"
+                    role="alert"
+                    aria-live="assertive"
+                ></div>
+
+                <button
+                    type="button"
+                    id="child-submit-button"
+                    class="mt-8 w-full bg-success hover:bg-success-hover text-white text-lg font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-0.5"
+                >
+                    查看筛查结果
+                </button>
+            </form>
+
+            <!-- 结果区域 -->
+            <div
+                id="child-result"
+                class="mt-8 p-6 rounded-lg shadow-md"
+                style="display: none"
+                role="status"
+                aria-live="polite"
+            >
+                <!-- 儿童结果将通过 JS 动态插入 -->
+            </div>
+        </div>
+
+        <!-- 内联 CSS (Tailwind 无法直接处理的样式) -->
+        <style>
+            .radio-label {
+                display: block;
+                background-color: #f8f9fa; /* bg-gray-50 */
+                padding: 10px 18px;
+                border-radius: 9999px; /* rounded-full */
+                border: 1px solid #dee2e6; /* border-gray-300 */
+                cursor: pointer;
+                transition:
+                    background-color 0.2s,
+                    border-color 0.2s,
+                    color 0.2s;
+                font-weight: 500;
+            }
+            .radio-label:hover {
+                background-color: #e9ecef; /* bg-gray-200 */
+            }
+            /* peer-checked 选择器 (Tailwind 核心功能) */
+            input[type="radio"]:checked + .radio-label {
+                background-color: #007bff; /* bg-primary */
+                color: #ffffff; /* text-white */
+                border-color: #007bff; /* border-primary */
+            }
+
+            /* 结果样式 (JS 会添加) */
+            #adult-result.positive,
+            #child-result.positive {
+                background-color: #fff3f3; /* bg-danger-light */
+                border: 1px solid #fdb8b8; /* border-danger-border */
+                border-left: 5px solid #dc3545; /* border-l-4 border-danger-text */
+            }
+            #adult-result.negative,
+            #child-result.negative {
+                background-color: #f3f9ff; /* bg-info-light */
+                border: 1px solid #b8d4fb; /* border-info-border */
+                border-left: 5px solid #007bff; /* border-l-4 border-info-text */
+            }
+        </style>
+
+        <script>
+            // 将 JS 放在 body 尾部确保 DOM 已加载
+
+            // 获取页面元素
+            const selectionScreen = document.getElementById("selection-screen");
+            const adultScreener = document.getElementById("adult-screener");
+            const childScreener = document.getElementById("child-screener");
+
+            // 导航按钮
+            document
+                .getElementById("select-adult")
+                .addEventListener("click", showAdultScreener);
+            document
+                .getElementById("select-child")
+                .addEventListener("click", showChildScreener);
+            document
+                .getElementById("back-to-selection-adult")
+                .addEventListener("click", showSelectionScreen);
+            document
+                .getElementById("back-to-selection-child")
+                .addEventListener("click", showSelectionScreen);
+
+            // 提交按钮 (修复：更新了ID并使用 addEventListener)
+            document
+                .getElementById("adult-submit-button")
+                .addEventListener("click", calculateAdultScore);
+            document
+                .getElementById("child-submit-button")
+                .addEventListener("click", calculateChildScore);
+
+            // --- 导航函数 ---
+            function showAdultScreener() {
+                selectionScreen.classList.add("hidden");
+                adultScreener.classList.remove("hidden");
+                childScreener.classList.add("hidden");
+                window.scrollTo(0, 0); // 滚动到页面顶部
+            }
+
+            function showChildScreener() {
+                selectionScreen.classList.add("hidden");
+                adultScreener.classList.add("hidden");
+                childScreener.classList.remove("hidden");
+                window.scrollTo(0, 0); // 滚动到页面顶部
+            }
+
+            function showSelectionScreen() {
+                selectionScreen.classList.remove("hidden");
+                adultScreener.classList.add("hidden");
+                childScreener.classList.add("hidden");
+                window.scrollTo(0, 0); // 滚动到页面顶部
+
+                // 可选：重置表单和结果
+                document.getElementById("adult-form").reset();
+                document.getElementById("child-form").reset();
+                document.getElementById("adult-result").style.display = "none";
+                document.getElementById("child-result").style.display = "none";
+                document.getElementById("adult-error-message").style.display =
+                    "none";
+                document.getElementById("child-error-message").style.display =
+                    "none";
+            }
+
+            // --- 成人 (ASRS) 计分逻辑 ---
+            // (原 calculateScore, 现改名为 calculateAdultScore)
+            function calculateAdultScore() {
+                let score = 0;
+                const resultDiv = document.getElementById("adult-result");
+                const errorDiv = document.getElementById("adult-error-message");
+
+                // 获取每个问题的值 (0-4)
+                const v1 = getValue("q1");
+                const v2 = getValue("q2");
+                const v3 = getValue("q3");
+                const v4 = getValue("q4");
+                const v5 = getValue("q5");
+                const v6 = getValue("q6");
+
+                // 检查是否所有问题都已回答
+                // 修复：使用 '||' (逻辑或) 替代 '|' (位或)
+                if (
+                    v1 === null ||
+                    v2 === null ||
+                    v3 === null ||
+                    v4 === null ||
+                    v5 === null ||
+                    v6 === null
+                ) {
+                    errorDiv.textContent = "请回答所有 6 个问题。";
+                    errorDiv.style.display = "block";
+                    resultDiv.style.display = "none"; // 隐藏任何旧结果
+                    errorDiv.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                    });
+                    return;
+                }
+
+                // 如果所有问题都已回答，隐藏错误消息
+                errorDiv.style.display = "none";
+
+                // ASRS-v1.1 筛查量表计分逻辑 [1]
+                // "阳性" (计 1 分) 的标准：
+                // 问题 1-4：经常 (3) 或 非常经常 (4)
+                if (v1 >= 3) score++;
+                if (v2 >= 3) score++;
+                if (v3 >= 3) score++;
+                if (v4 >= 3) score++;
+
+                // 问题 5-6：有时 (2)、经常 (3) 或 非常经常 (4)
+                if (v5 >= 2) score++;
+                if (v6 >= 2) score++;
+
+                // 显示结果
+                let resultHTML = `<h2 class="text-2xl font-bold mb-4">您的筛查得分: ${score} / 6</h2>`;
+
+                // 结果解释 [1]
+                if (score >= 4) {
+                    // 阳性结果
+                    resultDiv.className =
+                        "mt-8 p-6 rounded-lg shadow-md positive";
+                    resultHTML += `
+                    <p class="text-lg mb-4">根据ASRS-v1.1筛查量表的计分标准，<strong>4分或以上</strong>的分数表明您的症状与成人ADHD的特征 <strong>高度一致</strong> [1]。</p>
+                    <p class="font-semibold text-lg mb-2">重要行动建议：</p>
+                    <ul class="list-disc list-inside space-y-2 mb-4">
+                        <li>这 <strong>不是</strong> 一个正式诊断。</li>
+                        <li>这个结果强烈建议您与医疗保健专业人员（如精神科医生、临床心理学家或家庭医生）进行一次对话，讨论进行全面的专业评估 [6, 7]。</li>
+                        <li>在大样本研究中，该6题筛查在识别成人ADHD方面具有较好的特异度，但仍可能漏掉部分症状较轻或呈间歇性表现的个体 [1]。</li>
+                        <li>一个完整的诊断需要考虑您的完整病史（包括12岁以前的症状 [9, 10]）、症状对您生活（工作、社交）的影响，并排除其他可能导致类似症状的情况（如焦虑或抑郁）[10]。</li>
+                    </ul>
+                    <p>您可以将这个筛查结果（包括您对每个问题的回答）展示给您的医生，作为讨论的起点。</p>
+                `;
+                } else {
+                    // 阴性结果
+                    resultDiv.className =
+                        "mt-8 p-6 rounded-lg shadow-md negative";
+                    resultHTML += `
+                    <p class="text-lg mb-4">根据ASRS-v1.1筛查量表的计分标准，这个分数表明您的症状与成人ADHD的特征 <strong>一致性较低</strong>。</p>
+                    <p class="font-semibold text-lg mb-2">请注意：</p>
+                    <ul class="list-disc list-inside space-y-2 mb-4">
+                        <li>这个筛查工具非常简短，可能无法涵盖所有情况。</li>
+                        <li>ADHD的表现形式非常多样（例如，有些人可能主要表现为注意力不集中，而没有明显的过动症状）。</li>
+                        <li>如果分数较低，但您仍然持续地在学业、工作或人际关系中因注意力不集中、组织能力差或冲动性而感到困扰，咨询专业人士仍然是一个好的选择。</li>
+                    </ul>
+                `;
+                }
+
+                resultDiv.innerHTML = resultHTML;
+                resultDiv.style.display = "block";
+
+                // 滚动到结果区域
+                resultDiv.scrollIntoView({ behavior: "smooth" });
+            }
+
+            // --- 儿童 (Vanderbilt) 计分逻辑 (新) ---
+            function calculateChildScore() {
+                let inattentionScore = 0; // 注意力不集中得分
+                let hyperactivityScore = 0; // 多动/冲动得分
+                let allAnswered = true;
+
+                const resultDiv = document.getElementById("child-result");
+                const errorDiv = document.getElementById("child-error-message");
+
+                const values = [];
+                for (let i = 1; i <= 18; i++) {
+                    const val = getValue("cq" + i);
+                    if (val === null) {
+                        allAnswered = false;
+                        break;
+                    }
+                    values.push(val);
+                }
+
+                // 检查是否所有问题都已回答
+                if (!allAnswered) {
+                    errorDiv.textContent = "请回答所有 18 个问题。";
+                    errorDiv.style.display = "block";
+                    resultDiv.style.display = "none"; // 隐藏任何旧结果
+                    errorDiv.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                    });
+                    return;
+                }
+
+                // 如果所有问题都已回答，隐藏错误消息
+                errorDiv.style.display = "none";
+
+                // Vanderbilt 计分逻辑:
+                // "阳性" (计1分) 的标准是： 经常 (2) 或 非常经常 (3)
+
+                // 问题 1-9 (注意力不集中)
+                for (let i = 0; i < 9; i++) {
+                    if (values[i] >= 2) {
+                        inattentionScore++;
+                    }
+                }
+
+                // 问题 10-18 (多动/冲动)
+                for (let i = 9; i < 18; i++) {
+                    if (values[i] >= 2) {
+                        hyperactivityScore++;
+                    }
+                }
+
+                // 筛查阈值：
+                // 注意力不集中型 (Inattentive): 9 个问题中 >= 6 个为阳性
+                // 多动/冲动型 (Hyperactive): 9 个问题中 >= 6 个为阳性
+                const isPositiveInattentive = inattentionScore >= 6;
+                const isPositiveHyperactive = hyperactivityScore >= 6;
+
+                let resultHTML = `<h2 class="text-2xl font-bold mb-4">筛查结果</h2>`;
+                resultHTML += `
+                <div class="mb-4 space-y-2">
+                    <p class="text-lg"><strong>注意力不集中 (Inattention) 症状:</strong> ${inattentionScore} / 9 (阈值: 6)</p>
+                    <p class="text-lg"><strong>多动/冲动 (Hyperactivity/Impulsivity) 症状:</strong> ${hyperactivityScore} / 9 (阈值: 6)</p>
+                </div>
+            `;
+
+                let resultType = "negative";
+                let resultMessage = "";
+
+                if (isPositiveInattentive && isPositiveHyperactive) {
+                    resultType = "positive";
+                    resultMessage = `
+                    <p class="text-lg mb-4">根据Vanderbilt量表筛查标准，孩子的症状在 <strong>注意力不集中</strong> 和 <strong>多动/冲动</strong> 两个维度上均 <strong>高度一致</strong>（混合型表现）。</p>
+                `;
+                } else if (isPositiveInattentive) {
+                    resultType = "positive";
+                    resultMessage = `
+                    <p class="text-lg mb-4">根据Vanderbilt量表筛查标准，孩子的症状与 <strong>注意力不集中型 (Inattentive)</strong> ADHD 特征 <strong>高度一致</strong>。</p>
+                `;
+                } else if (isPositiveHyperactive) {
+                    resultType = "positive";
+                    resultMessage = `
+                    <p class="text-lg mb-4">根据Vanderbilt量表筛查标准，孩子的症状与 <strong>多动/冲动型 (Hyperactive/Impulsive)</strong> ADHD 特征 <strong>高度一致</strong>。</p>
+                `;
+                } else {
+                    resultType = "negative";
+                    resultMessage = `
+                    <p class="text-lg mb-4">根据Vanderbilt量表筛查标准，孩子的症状得分 <strong>未达到</strong> ADHD 筛查阈值。</p>
+                `;
+                }
+
+                // 设置结果框样式
+                resultDiv.className = `mt-8 p-6 rounded-lg shadow-md ${resultType}`;
+
+                // 添加通用建议
+                resultHTML += resultMessage;
+                resultHTML += `
+                <p class="font-semibold text-lg mb-2">重要行动建议（家长）：</p>
+                <ul class="list-disc list-inside space-y-2 mb-4">
+                    <li><strong>这绝不是一个正式诊断。</strong> 许多其他情况（如焦虑、学习障碍、环境压力等）也可能导致类似的行为表现。</li>
+                    <li>我们 <strong>强烈建议</strong> 您带着这些结果（包括您对每个问题的回答）去咨询您孩子的 <strong>儿科医生、儿童精神科医生或临床心理学家</strong>。</li>
+                    <li>Vanderbilt 量表的正式评分还会结合孩子在学校、家庭等多个场景中的功能表现（例如学习成绩、同伴关系、家庭关系等），而本在线简化版<strong>未包含这些项目</strong>。</li>
+                    <li>专业人员会进行全面的评估，包括与您和孩子面谈、可能需要学校老师填写评估量表，并排除其他可能性，才能做出准确诊断。</li>
+                </ul>
+            `;
+
+                resultDiv.innerHTML = resultHTML;
+                resultDiv.style.display = "block";
+
+                // 滚动到结果区域
+                resultDiv.scrollIntoView({ behavior: "smooth" });
+            }
+
+            // --- 通用辅助函数 ---
+            function getValue(name) {
+                const radio = document.querySelector(
+                    `input[name="${name}"]:checked`,
+                );
+                if (radio) {
+                    return parseInt(radio.value, 10);
+                }
+                return null;
+            }
+
+            // 修复：确保函数在全局作用域中
+            // (通过将脚本放在 body 尾部并直接定义函数，它们已在全局作用域中)
+            // (已将事件监听器改为 addEventListener)
+        </script>
+    </body>
+</html>
